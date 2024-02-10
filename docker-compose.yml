@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+
+  database:
+    image: postgres:10.5
+    container_name: postgres
+    ports:
+      - '8002:5432'
+    environment:
+      - POSTGRES_DB=form_data
+      - POSTGRES_USER=nitt
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - './database/init:/docker-entrypoint-initdb.d/'
+  frontend:
+    container_name: react-app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - './:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=development
